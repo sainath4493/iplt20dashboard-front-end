@@ -8,6 +8,7 @@ import "./TeamPage.scss";
 export const TeamPage = () => {
   const [team, setTeam] = useState({ matches: [] });
   const { teamName } = useParams();
+  const [latestYearPlayedbyTeam, setLatestYearPlayedbyTeam] = useState();
   useEffect(() => {
     //function passed in useffect is not async
     const fetchTeam = async () => {
@@ -16,6 +17,7 @@ export const TeamPage = () => {
       );
       const data = await response.json();
       setTeam(data);
+      setLatestYearPlayedbyTeam(data.yearsPlayedByTeam[0]);
     };
     fetchTeam();
   }, [teamName]);
@@ -54,7 +56,8 @@ export const TeamPage = () => {
       ))}
       <div className="more-link">
         <Link
-          to={`/teams/${teamName}/matches/${process.env.REACT_APP_DATA_END_YEAR}`}
+          //to={`/teams/${teamName}/matches/${process.env.REACT_APP_DATA_END_YEAR}`}
+          to={`/teams/${teamName}/matches/${latestYearPlayedbyTeam}`}
         >
           More >
         </Link>

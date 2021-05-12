@@ -7,6 +7,7 @@ import "./MatchPage.scss";
 export const MatchPage = () => {
   const [matches, setMatches] = useState([]);
   const { teamName, year } = useParams();
+  const [yearsPlayedByTeam, setYearsPlayedByTeam] = useState([]);
   useEffect(() => {
     //function passed in useffect is not async
     const fetchMatches = async () => {
@@ -15,6 +16,13 @@ export const MatchPage = () => {
       );
       const data = await response.json();
       setMatches(data);
+
+      const teamResponse = await fetch(
+        `${process.env.REACT_APP_API_ROOT_URL}/team/${teamName}`
+      );
+
+      const teamData = await teamResponse.json();
+      setYearsPlayedByTeam(teamData.yearsPlayedByTeam);
     };
     fetchMatches();
   }, [teamName, year]);
@@ -23,7 +31,10 @@ export const MatchPage = () => {
     <div className="MatchPage">
       <div className="year-selector">
         Select Year
-        <YearSelector teamName={teamName} />
+        <YearSelector
+          yearsPlayedByTeam={yearsPlayedByTeam}
+          teamName={teamName}
+        />
       </div>
       <div>
         <h1 className="page-heading">
